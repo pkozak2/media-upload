@@ -1,6 +1,6 @@
 # media-upload
 # media-upload
-##Need to install:
+## Need to install:
 
 sudo yum install pyhton-pip
 
