@@ -9,3 +9,7 @@ sudo pip install boto3
 sudo pip install pytest Flask
 
 export PYTHONPATH=/home/ec2-user/media-upload
+
+
+sudo apt-get install ffmpeg
+
