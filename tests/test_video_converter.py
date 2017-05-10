@@ -16,3 +16,14 @@ class TestVideoConverter(unittest.TestCase):
        converter = VideoConverter()
        converter.transformImageToVideo(image, video_output)
        assert(os.path.exists(video_output))
+
+   def testCreateImageTransition(self):
+       converter = VideoConverter()
+       imageOne = self.getAbsolutePath('example.png')
+       imageTwo = self.getAbsolutePath('example1.png')
+       video_output = self.getAbsolutePath('example.mov')
+       converter.transformImageToVideo(imageOne, imageTwo, video_output)
+       assert(os.path.exists(video_output))
+
+
+
