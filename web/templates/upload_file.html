@@ -19,7 +19,7 @@
  <body>
   <div class="dropzone" id="dropzoneForm">
   </div>
-  <form class="requestAlbumForm" action="/upload" method="POST">
+  <form class="requestAlbumForm" action="{{url_for('request_album_creation')}}" method="POST">
      <input name="email" type="text"/>
      <button type="submit">Create Album</button>
   </form>
