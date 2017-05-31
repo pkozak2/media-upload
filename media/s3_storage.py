@@ -6,8 +6,6 @@ class S3MediaStorage:
     bucket = self._s3.Bucket(self._bucket_name)
     bucket.put_object(Key=key, Body=media)
   def get(self, key):
-    bucket = self._s3.Bucket(self.__bucket_name)
-    key = bucket.get_key(key)
-    key.get_contents_to_filename('/tmp/%s' % key)
-
+    bucket = self._s3.Bucket(self._bucket_name)
+    bucket.download_file('/tmp/%s' % key)
     return open('/tmp/%s' % key, 'r')
