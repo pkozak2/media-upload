@@ -2,7 +2,7 @@ import time
 import os
 import importlib
 
-services = importlib.import_module("services_%s" % (os.environ.get('APP_ENV', 'prod')))
+services = importlib.import_module("services_%s" % (os.environ.get('APP_ENV', 'test')))
 
 while True:
     for request in services.queue.requests():
