@@ -9,7 +9,7 @@ class TestS3MediaStorage(unittest.TestCase):
     to_upld_path = os.path.join(os.path.dirname(__file__), 'test.txt')
     to_upl_file = open(to_upld_path, 'rb')
     s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
-    media_storage = S3MediaStorage(s3=s3, bucket_name='kanclerj-153')
+    media_storage = S3MediaStorage(s3=s3, bucket_name='pkozak')
     media_storage.store(key='upl_name.txt', media=to_upl_file)
 
 if __name__ == '__main__':
