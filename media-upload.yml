@@ -2,7 +2,7 @@
 - hosts: servers
   become: true
   vars:
-   project_root: ~/media-upload-ansible
+   project_root: ~/media-upload
    project_name: media-upload
    project_repo: https://github.com/pkozak2/media-upload
   tasks:
