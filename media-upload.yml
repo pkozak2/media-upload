@@ -5,6 +5,7 @@
    project_root: ~/media-upload
    project_name: media-upload
    project_repo: https://github.com/pkozak2/media-upload
+   python_path: /root/media-upload
   tasks:
    - name: update apt-get
      apt:
@@ -27,3 +28,5 @@
        dest: "{{ project_root }}"
    - name: install needed python packages
      pip: requirements={{project_root}}/requirements.txt
+   - name: "set enviroment"
+     lineinfile: dest=~/.bashrc line="export PYTHONPATH={{python_path}}"
