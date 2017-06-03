@@ -1,6 +1,25 @@
 # media-upload
-# media-upload
-## Need to install:
+
+## NEW Version
+### Run commands
+
+```sh
+git clone -b ansible https://github.com/pkozak2/media-upload
+```
+
+then:
+
+```sh
+cd media-upload
+```
+edit hosts.ini file and start:
+
+```sh
+ansible-playbook -i hosts.ini media-upload.yml
+```
+
+## OLD HELP
+### Need to install:
 
 sudo yum install pyhton-pip
 
