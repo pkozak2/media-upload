@@ -1,0 +1,29 @@
+---
+- hosts: servers
+  become: true
+  vars:
+   project_root: ~/media-upload-ansible
+   project_name: media-upload
+   project_repo: https://github.com/pkozak2/media-upload
+  tasks:
+   - name: update apt-get
+     apt:
+       update_cache: yes
+   - name: update all apt-get packages
+     apt:
+       upgrade: dist
+   - name: install needed packages
+     apt:
+       name: "{{item}}"
+       state: latest
+     with_items:
+       - python-pip
+       - git
+       - ffmpeg
+   - name: clone media-upload repo
+     git:
+       repo: "{{ project_repo }}"
+       version: master
+       dest: "{{ project_root }}"
+   - name: install needed python packages
+     pip: requirements={{project_root}}/requirements.txt
