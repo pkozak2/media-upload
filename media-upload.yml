@@ -41,8 +41,8 @@
 
     - name: "install transcode app"
       git:
-        repo: 'http://gitlab.kni.uek.krakow.pl/wpc/media-upload.git'
-        dest: "{{app_path}}"
+        repo: 'https://github.com/pkozak2/media-upload.git'
+        version: master
         force: yes
     - name: "install app dependencies"
       pip:
@@ -67,8 +67,10 @@
         - nginx
     - name: "install app"
       git:
-        repo: 'http://gitlab.kni.uek.krakow.pl/wpc/media-upload.git'
+        repo: 'https://github.com/pkozak2/media-upload.git'
+        version: master
         dest: "/home/ubuntu/media"
+        force: yes
     - name: "install app dependencies"
       pip:
         requirements: "/home/ubuntu/media/requirements"
