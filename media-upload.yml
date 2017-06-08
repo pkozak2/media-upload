@@ -1,32 +1,104 @@
 ---
-- hosts: servers
-  become: true
-  vars:
-   project_root: ~/media-upload
-   project_name: media-upload
-   project_repo: https://github.com/pkozak2/media-upload
-   python_path: /root/media-upload
+- hosts: all
+  become: yes
+  gather_facts: False
+
   tasks:
-   - name: update apt-get
-     apt:
-       update_cache: yes
-   - name: update all apt-get packages
-     apt:
-       upgrade: dist
-   - name: install needed packages
-     apt:
-       name: "{{item}}"
-       state: latest
-     with_items:
-       - python-pip
-       - git
-       - ffmpeg
-   - name: clone media-upload repo
-     git:
-       repo: "{{ project_repo }}"
-       version: master
-       dest: "{{ project_root }}"
-   - name: install needed python packages
-     pip: requirements={{project_root}}/requirements.txt
-   - name: "set enviroment"
-     lineinfile: dest=~/.bashrc line="export PYTHONPATH={{python_path}}"
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- hosts: common
+  become: yes
+  tasks:
+    - name: "os dependencies"
+      apt:
+        name: "{{item}}"
+      with_items:
+        - python-pip
+
+- hosts: transcoding
+  become: yes
+  vars:
+    app_path: '/home/ubuntu/transcoding'
+  tasks:
+    - name: "os dependencies"
+      apt:
+        name: "{{item}}"
+      with_items:
+        - "ffmpeg"
+        - "python-pip"
+    - lineinfile:
+        dest: "/home/ubuntu/.bashrc"
+        line: "{{item}}"
+      with_items:
+        - "export APP_ENV=prod"
+        - "export QUEUE_NAME={{queue_name}}"
+        - "export QUEUE_REGION={{queue_region}}"
+        - "export BUCKET_NAME={{bucket_name}}"
+        - "export PYTHONPATH={{app_path}}"
+        - "export APP_ENV=prod"
+        - "export MANDRILL_KEY={{mandrill_api_key}}"
+
+    - name: "install transcode app"
+      git:
+        repo: 'http://gitlab.kni.uek.krakow.pl/wpc/media-upload.git'
+        dest: "{{app_path}}"
+        force: yes
+    - name: "install app dependencies"
+      pip:
+        requirements: "{{app_path}}/requirements"
+
+    - name: "add owner"
+      file:
+        path: "{{app_path}}"
+        owner: "{{ansible_user}}"
+        group: "{{ansible_user}}"
+        recurse: yes
+
+- hosts: web
+  become: yes
+  tasks:
+    - name: "os dependencies"
+      apt:
+        name: "{{item}}"
+      with_items:
+        - uwsgi
+        - uwsgi-plugin-python
+        - nginx
+    - name: "install app"
+      git:
+        repo: 'http://gitlab.kni.uek.krakow.pl/wpc/media-upload.git'
+        dest: "/home/ubuntu/media"
+    - name: "install app dependencies"
+      pip:
+        requirements: "/home/ubuntu/media/requirements"
+    - name: "install app dependencies"
+      pip:
+        name: "{{item}}"
+      with_items:
+        - flask
+        - boto3
+    - name: "setup application server"
+      template:
+        src: "templates/app.ini"
+        dest: "/etc/uwsgi/apps-enabled/app.ini"
+    - name: "setup web server"
+      template:
+        src: "templates/app.conf"
+        dest: "/etc/nginx/sites-enabled/app.conf"
+    - template:
+        src: "templates/nginx.conf"
+        dest: "/etc/nginx/nginx.conf"
+    - name: "remove defualt cfg"
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+
+    - name: "restart app server"
+      service:
+        name: uwsgi
+        state: restarted
+    - name: "restart web server"
+      service:
+        name: nginx
+        state: restarted

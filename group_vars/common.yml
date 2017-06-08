@@ -1,0 +1,5 @@
+---
+bucket_name: "pkozak"
+queue_name: "pkozak"
+queue_region: "eu-central-1"
+mandrill_api_key: "4OBwBXURpKwI5QLQv8LQ1g"
