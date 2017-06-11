@@ -42,6 +42,7 @@
     - name: "install transcode app"
       git:
         repo: 'https://github.com/pkozak2/media-upload.git'
+        dest: "{{app_path}}"
         version: master
         force: yes
     - name: "install app dependencies"
