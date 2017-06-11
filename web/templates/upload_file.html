@@ -4,6 +4,31 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='css/dropzone.min.css') }}"
         />
+		<style>
+		body {
+		 margin: auto;
+		 width: 1080px;
+		 padding-top: 50px;
+		 background-color: #f9f9f9;
+		}
+
+		.order-ctrl {
+		 text-align:center;
+		}
+
+		.upload-zone{
+		 display: flex;
+			justify-content: center;
+			align-items: center;
+			border: 1px solid #ccc;
+			box-shadow: 3px -1px 18px 1px #CCC;
+		}
+
+		.upload-zone:hover{
+		 transition: all .3s;
+		 background-color: #F9F9F9;
+		}
+		</style>
     </head>
     <body>
 
